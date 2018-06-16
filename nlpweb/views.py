@@ -41,7 +41,8 @@ def getfile(request):
 
 
 def download_file(request):
-    httpResponse = FileResponse(open('temp.txt','r',encoding='utf-8').read())
+    filename=request.GET.get('filename')
+    httpResponse = FileResponse(open(filename,'r',encoding='utf-8').read())
     httpResponse["Access-Control-Allow-Origin"] = "*"
     httpResponse['Content-Type'] = 'application/octet-stream'
     httpResponse['Content-Disposition'] = 'attachment;filename="text.doc"'
