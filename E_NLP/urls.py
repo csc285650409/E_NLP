@@ -15,9 +15,13 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+from nlpweb import  views as view
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
 
+    url('file/', view.getfile),
+    url('download/', view.download_file),
+    url('save/', view.save_file)
 
 ]
