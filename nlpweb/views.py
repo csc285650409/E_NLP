@@ -3,6 +3,8 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.http import FileResponse
 from nlpweb.nlpmain import main
+import datetime
+import time
 import json
 
 
@@ -51,9 +53,10 @@ def save_file(request):
     text=text.replace("<br>","").strip()
     text=bytes(text, encoding = "utf-8")
     response = {}
-    file = open('temp.txt', 'wb')
+    filename='tempfile/'+time.mktime(time.localtime()).__str__()+'.txt'
+    file = open(filename, 'wb')
     file.write(text)
     file.close()
-    httpResponse = HttpResponse(json.dumps({'code': '200'}))
+    httpResponse = HttpResponse(json.dumps({'code': '200','filename':filename}))
     httpResponse["Access-Control-Allow-Origin"] = "*"
     return httpResponse

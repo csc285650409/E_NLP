@@ -1,4 +1,0 @@
-Alan: But the alumni of these good schools have already donated a lot of money to their schools each year, but the average university alumni donate relatively less, so this policy is not reasonable.
-赞同
-论据
-Sentiment(polarity=0.07083333333333333, subjectivity=0.41666666666666663)
