@@ -1,10 +1,8 @@
 $(document).ready(function(){
+	//baseUrl = 'http://47.106.139.236:8000/';
 	baseUrl = 'http://127.0.0.1:8000/';
 	//$('.summernote').summernote();
 	//$('.note-editable').summernote('code', "123123");
-	console.log($('.summernote').code());
-					 $('.summernote').code("12313");
-					 $('#editText').val("123123123123");
 	$("#saveBtn").click(function(){
 		var text = $(".note-editable").text();
 		//console.log(text);
@@ -14,13 +12,14 @@ $(document).ready(function(){
 				data:{'text':text},
 				async:true,
 				success:function(data){
-					console.log(data);
+					var filename = data['filename'];
+					$("#downloada").attr("href",baseUrl+"download/?filename="+filename);
 				}
 			})
 	});
 
 	$("#uploadBtn").click(function(){
-		var file = $('<input type=\'file\' name=\'file\' id=\'files\'/>');
+		var file = $('<input type=\'file\' name=\'file\' id=\'files\' accept=\'.txt\'/>');
 		var form = $('<form></form>');
 		file.appendTo(form);
 		file.click();

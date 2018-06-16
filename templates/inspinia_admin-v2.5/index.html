@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>情感分析</title>
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="css/plugins/iCheck/custom.css" rel="stylesheet">
+    <link href="css/plugins/summernote/summernote.css" rel="stylesheet">
+    <link href="css/plugins/summernote/summernote-bs3.css" rel="stylesheet">
+    <link href="css/animate.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+    <div id="wrapper">
+
+
+
+                
+
+                    <div class="wrapper wrapper-content">
+
+                        <div class="row">
+                            <div class="col-lg-12 animated fadeInRight">
+                                <div class="mail-box-header">
+                                    <div class="pull-right">
+                                        <button class="btn btn-white btn-sm"  id="uploadBtn" ><i class="fa fa-file-word-o"></i> 选择文件</button>
+                                    </div>
+                                    <h2>
+                                        情感分析
+                                    </h2>
+                                </div>
+                                <div class="mail-box">
+                                    <div class="mail-text h-200">
+
+                                        <div class="summernote" id="editText">
+                                            <h3>请先上传文件，编辑完后点击保存后点击下载。</h3>
+                                            
+
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <div class="mail-body text-right tooltip-demo">
+                                        <button id="saveBtn" class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="top" ><i class="fa fa-save"></i> 保存</button>
+                                        <a  class="btn btn-white btn-sm" data-toggle="tooltip" data-placement="top" id="downloada"><i class="fa fa-cloud-download"></i> 下载</a>
+                                    </div>
+                                    <div class="clearfix"></div>
+
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+
+                </div>
+            </div>
+
+            <!-- Mainly scripts -->
+            <script src="js/jquery-2.1.1.js"></script>
+            <script src="js/bootstrap.min.js"></script>
+            <script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
+            <script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+            <!-- Custom and plugin javascript -->
+            <script src="js/inspinia.js"></script>
+            <script src="js/plugins/pace/pace.min.js"></script>
+
+            <!-- iCheck -->
+            <script src="js/plugins/iCheck/icheck.min.js"></script>
+
+            <!-- SUMMERNOTE -->
+            <script src="js/plugins/summernote/summernote.min.js"></script>
+            
+            <script>
+                $(document).ready(function(){
+                    $('.i-checks').iCheck({
+                        checkboxClass: 'icheckbox_square-green',
+                        radioClass: 'iradio_square-green',
+                    });
+
+
+                    $('.summernote').summernote({toolbar:[]});
+
+                });
+                var edit = function() {
+                    $('.click2edit').summernote({focus: true});
+                };
+                var save = function() {
+            var aHTML = $('.click2edit').code(); //save HTML If you need(aHTML: array).
+            $('.click2edit').destroy();
+        };
+
+    </script>
+    <script type="text/javascript" src="js/custom.js"></script>
+</body>
+
+</html>

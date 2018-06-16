@@ -20,7 +20,10 @@ def savefile(file):
 def getfile(request):
     file = request.FILES.get('file')
     print(file.name)
-    # print(file.read())
+    t=file.read().decode('utf-8')
+    print(t)
+
+
     # print(file.read().decode("UTF-8"))
     savefile(file)
 
@@ -42,6 +45,7 @@ def getfile(request):
 
 def download_file(request):
     filename=request.GET.get('filename')
+    print(filename)
     httpResponse = FileResponse(open(filename,'r',encoding='utf-8').read())
     httpResponse["Access-Control-Allow-Origin"] = "*"
     httpResponse['Content-Type'] = 'application/octet-stream'
@@ -58,6 +62,6 @@ def save_file(request):
     file = open(filename, 'wb')
     file.write(text)
     file.close()
-    httpResponse = HttpResponse(json.dumps({'code': '200','filename':filename}))
+    httpResponse = HttpResponse(json.dumps({'code': '200','filename':filename}), content_type="application/json")
     httpResponse["Access-Control-Allow-Origin"] = "*"
     return httpResponse
