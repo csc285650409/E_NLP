@@ -33,6 +33,10 @@ for line in posFile1.readlines():
     trainPosNeg.append((line, 'pos'))
 for line in posFile2.readlines():
     trainPosNeg.append((line, 'pos'))
+negFile1.close()
+negFile2.close()
+posFile1.close()
+posFile2.close()
 
 classifyPosNeg = NaiveBayesClassifier(trainPosNeg)
 classifySubObj = NaiveBayesClassifier(trainSubObj)
