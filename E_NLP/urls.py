@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from nlpweb import  views as view
+from nlpweb import views as view
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
