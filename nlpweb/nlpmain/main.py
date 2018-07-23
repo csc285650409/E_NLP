@@ -56,7 +56,7 @@ def SaveModel(classify,filename):
     f.close()
 
 #读取模型
-def LoadModel(classify,filename):
+def LoadModel(filename):
     f=open(filename,'rb')
     classify=pickle.load(f)
     f.close()
