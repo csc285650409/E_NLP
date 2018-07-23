@@ -1,4 +1,4 @@
-import nltk
+import pickle
 import textblob
 from textblob.classifiers import NaiveBayesClassifier
 
@@ -21,10 +21,10 @@ trainSubObj = [
     ('But the alumni of these good schools have already donated a lot of money to their schools each year, but the average university alumni donate relatively less, so this policy is not reasonable.', 'obj'),
 ]
 
-negFile1 = open('负面评价词语（英文）.txt')
-negFile2 = open('负面情感词语（英文）.txt')
-posFile1 = open('正面评价词语（英文）.txt')
-posFile2 = open('正面情感词语（英文）.txt')
+# negFile1 = open('负面评价词语（英文）.txt')
+# negFile2 = open('负面情感词语（英文）.txt')
+# posFile1 = open('正面评价词语（英文）.txt')
+# posFile2 = open('正面情感词语（英文）.txt')
 # count = 30
 # now = 0
 # for line in negFile1.readlines():
@@ -35,14 +35,32 @@ posFile2 = open('正面情感词语（英文）.txt')
 #     trainPosNeg.append((line, 'pos'))
 # for line in posFile2.readlines():
 #     trainPosNeg.append((line, 'pos'))
-negFile1.close()
-negFile2.close()
-posFile1.close()
-posFile2.close()
+# negFile1.close()
+# negFile2.close()
+# posFile1.close()
+# posFile2.close()
 
 classifyPosNeg = NaiveBayesClassifier(trainPosNeg)
 classifySubObj = NaiveBayesClassifier(trainSubObj)
-# cl.update(new_train)
+
+#用新语料更新分类器
+def ClassifyUpdate(classify,newtrain):
+    classify.update(newtrain)
+    # classify.classify(text)#分类使用方法
+    return classify
+
+#保存模型
+def SaveModel(classify,filename):
+    f=open(filename,'wb')
+    pickle.dump(classify,f)
+    f.close()
+
+#读取模型
+def LoadModel(classify,filename):
+    f=open(filename,'rb')
+    classify=pickle.load(f)
+    f.close()
+    return classify
 
 textA = '''
 Jenifer Frank: I think the government need to increase funding for top universities. Because most of the country’s top human resources are from these schools, and increasing funding will allow universities to have better resources for future talent in those countries.
@@ -97,3 +115,5 @@ def ENLP(text):
     #         print(classifySubObj.classify(sen))
     #         print(sen.sentiment)
 
+if __name__ == '__main__':
+    ENLP(textA)
