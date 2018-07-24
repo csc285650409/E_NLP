@@ -2,24 +2,27 @@ import pickle
 import textblob
 from textblob.classifiers import NaiveBayesClassifier
 
-trainPosNeg = [
-    ('I think the government need to increase funding for top universities.', 'pos'),
-    ('Because most of the country’s top human resources are from these schools, and increasing funding will allow universities to have better resources for future talent in those countries.', 'pos'),
-    ('I don\'t agree with you.', 'neg'),
-    ('This behavior is unfair to other normal universities.', 'neg'),
-    ("No,The top school students have enter a better platform by fair competition, and deserve better treatment.", 'pos'),
-    ('So I think it should be better to invest more money in top universities.', 'pos'),
-    ('But the alumni of these good schools have already donated a lot of money to their schools each year, but the average university alumni donate relatively less, so this policy is not reasonable.', 'neg'),
-]
-trainSubObj = [
-    ('I think the government need to increase funding for top universities.', 'sub'),
-    ('Because most of the country’s top human resources are from these schools, and increasing funding will allow universities to have better resources for future talent in those countries.', 'obj'),
-    ('I don\'t agree with you.', 'sub'),
-    ('This behavior is unfair to other normal universities.', 'sub'),
-    ("No,The top school students have enter a better platform by fair competition, and deserve better treatment.", 'sub'),
-    ('So I think it should be better to invest more money in top universities.', 'sub'),
-    ('But the alumni of these good schools have already donated a lot of money to their schools each year, but the average university alumni donate relatively less, so this policy is not reasonable.', 'obj'),
-]
+# trainPosNeg = [
+#     ('I think the government need to increase funding for top universities.', 'pos'),
+#     ('Because most of the country’s top human resources are from these schools, and increasing funding will allow universities to have better resources for future talent in those countries.', 'pos'),
+#     ('I don\'t agree with you.', 'neg'),
+#     ('This behavior is unfair to other normal universities.', 'neg'),
+#     ("No,The top school students have enter a better platform by fair competition, and deserve better treatment.", 'pos'),
+#     ('So I think it should be better to invest more money in top universities.', 'pos'),
+#     ('But the alumni of these good schools have already donated a lot of money to their schools each year, but the average university alumni donate relatively less, so this policy is not reasonable.', 'neg'),
+# ]
+# trainSubObj = [
+#     ('I think the government need to increase funding for top universities.', 'sub'),
+#     ('Because most of the country’s top human resources are from these schools, and increasing funding will allow universities to have better resources for future talent in those countries.', 'obj'),
+#     ('I don\'t agree with you.', 'sub'),
+#     ('This behavior is unfair to other normal universities.', 'sub'),
+#     ("No,The top school students have enter a better platform by fair competition, and deserve better treatment.", 'sub'),
+#     ('So I think it should be better to invest more money in top universities.', 'sub'),
+#     ('But the alumni of these good schools have already donated a lot of money to their schools each year, but the average university alumni donate relatively less, so this policy is not reasonable.', 'obj'),
+# ]
+
+pnFileName = 'pnModel.mdl'
+soFileName = 'soModel.mdl'
 
 # negFile1 = open('负面评价词语（英文）.txt')
 # negFile2 = open('负面情感词语（英文）.txt')
@@ -40,8 +43,9 @@ trainSubObj = [
 # posFile1.close()
 # posFile2.close()
 
-classifyPosNeg = NaiveBayesClassifier(trainPosNeg)
-classifySubObj = NaiveBayesClassifier(trainSubObj)
+# classifyPosNeg = NaiveBayesClassifier(trainPosNeg)
+# classifySubObj = NaiveBayesClassifier(trainSubObj)
+
 
 #用新语料更新分类器
 def ClassifyUpdate(classify,newtrain):
@@ -49,11 +53,13 @@ def ClassifyUpdate(classify,newtrain):
     # classify.classify(text)#分类使用方法
     return classify
 
+
 #保存模型
 def SaveModel(classify,filename):
     f=open(filename,'wb')
     pickle.dump(classify,f)
     f.close()
+
 
 #读取模型
 def LoadModel(filename):
@@ -61,6 +67,17 @@ def LoadModel(filename):
     classify=pickle.load(f)
     f.close()
     return classify
+
+
+def updatePNmodel(newtrain):
+    classify = LoadModel(pnFileName)
+    SaveModel(ClassifyUpdate(classify, newtrain), pnFileName)
+
+
+def updateSOmodel(newtrain):
+    classify = LoadModel(soFileName)
+    SaveModel(ClassifyUpdate(classify, newtrain), soFileName)
+
 
 textA = '''
 Jenifer Frank: I think the government need to increase funding for top universities. Because most of the country’s top human resources are from these schools, and increasing funding will allow universities to have better resources for future talent in those countries.
@@ -87,33 +104,51 @@ def ENLP(text):
             b.append(textblob.TextBlob(t))
 
     answer = ""
-    for i in range(len(b)):
-        for sen in b[i].sentences:
-            # print(sen)
-            answer += str(sen) + "\n<br>"
-            if sen.sentiment.polarity > 0:
-                # print("赞同")
-                answer += "agree\n<br>"
-            else:
-                # print("反对")
-                answer += "disagree\n<br>"
-            if sen.sentiment.subjectivity >= 0.5:
-                # print("论点")
-                answer += "论点\n<br>"
-            else:
-                # print("论据")
-                answer += "论据\n<br>"
-            # print(sen.sentiment)
-            answer += str(sen.sentiment)+"\n<br>"
-    return answer
-    # print('train ok')
-    #
+    posObjDisplay = "positive objective:\n<br>"
+    negObjDisplay = "negative objective:\n<br>"
     # for i in range(len(b)):
     #     for sen in b[i].sentences:
-    #         print(sen)
-    #         print(classifyPosNeg.classify(sen))
-    #         print(classifySubObj.classify(sen))
-    #         print(sen.sentiment)
+    #         # print(sen)
+    #         answer += str(sen) + "\n<br>"
+    #         if sen.sentiment.polarity > 0:
+    #             # print("赞同")
+    #             answer += "agree\n<br>"
+    #         else:
+    #             # print("反对")
+    #             answer += "disagree\n<br>"
+    #         if sen.sentiment.subjectivity >= 0.5:
+    #             # print("论点")
+    #             answer += "论点\n<br>"
+    #         else:
+    #             # print("论据")
+    #             answer += "论据\n<br>"
+    #         # print(sen.sentiment)
+    #         answer += str(sen.sentiment)+"\n<br>"
+    # return answer
+    isClaim = True
+    for i in range(len(b)):
+        for sen in b[i].sentences:
+            pnResult = str(LoadModel(pnFileName).classify(sen))
+            soResult = str(LoadModel(soFileName).classify(sen))
+            if isClaim:
+                if pnResult == 'pos':
+                    pnResult = 'neg'
+                else:
+                    pnResult = 'pos'
+            answer += str(sen) + '\n<br>' + pnResult + '\n<br>' + soResult + '\n<br>'
+            if pnResult == 'pos' and soResult == 'obj':
+                posObjDisplay += sen + '\n<br>'
+            elif pnResult == 'neg' and soResult == 'obj':
+                negObjDisplay += sen + '\n<br>'
+            print(sen)
+            print(pnResult)
+            print(soResult)
+            isClaim = not isClaim
+            # print(sen.sentiment)
+    return answer+posObjDisplay+negObjDisplay
 
-if __name__ == '__main__':
-    ENLP(textA)
+
+# if __name__ == '__main__':
+#     ENLP(textA)
+    # SaveModel(classifyPosNeg, 'pnModel.mdl')
+    # SaveModel(classifySubObj, 'soModel.mdl')
